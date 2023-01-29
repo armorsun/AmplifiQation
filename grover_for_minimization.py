@@ -12,7 +12,7 @@ import math
 
 import numpy as np
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
-from qiskit.circuit.library import GroverOperator
+from qiskit.circuit.library import GroverOperator, HGate
 from qiskit.providers.aer import QasmSimulator
 from qiskit.visualization import plot_histogram
 
@@ -58,48 +58,14 @@ def minimization_oracle(circuit: QuantumCircuit, data_register_q: QuantumRegiste
     oracle_circuit = QuantumCircuit(ancillary_register_q, data_register_q)
     oracle_circuit_for_cleanup = oracle_circuit.copy()
 
-    # Perform a QFT, so we can add values in the Fourier basis.
-    oracle_circuit = qft(circuit=oracle_circuit, n=number_ancillary_qubits_required)
+    # Conditionally load all the values in arr onto the axcillary register.
+    oracle_circuit = load_values_in_arr(circuit=oracle_circuit, n_ancillary_qubits=number_ancillary_qubits_required,
+                                        n_data_qubits=number_of_data_qubits_required, arr=arr)
 
-    oracle_circuit.barrier(ancillary_register_q)
-
-    # Perform inverse QFT to return to the computational basis.
-    adjoint_circuit = qft(circuit=oracle_circuit_for_cleanup, n=number_ancillary_qubits_required).inverse()
-    oracle_circuit.compose(adjoint_circuit, inplace=True)
-
-    # Draw the circuit
+    # Draw the circuit.
     oracle_circuit.draw(output='mpl')
     plt.show()
 
-    def add_k_fourier(k: int, reg: QuantumRegister) -> None:
-        """
-        Add the integer value k to wires.
-        :return: None, operation is done in place.
-        """
-        for j in reg.size():
-            circuit.rz(phi=k * pi / (2 ** j), qubit=reg[j])
-
-    def load_values_in_arr():
-        """
-        Conditionally load all the values in arr onto the axcillary register.
-        """
-        # Perform a QFT, so we can add values in the Fourier basis.
-        qft(circuit=minimization_oracle_circuit, n=number_ancillary_qubits_required)
-
-        # Draw the circuit
-        minimization_oracle_circuit.draw(output='mpl')
-        plt.show()
-
-        # # Loop through each of the data wires, preforming controlled additions.
-        # for j in data_register_q.size():
-        #     controlled_rotation = add_k_fourier(k=arr[j], wires=ancillary_register_q).control(2)
-        #     minimization_oracle.ctrl(op=add_k_fourier(k=arr[j], wires=ancillary_register_q), control=data_register_q[j])
-
-        # Return to the computational basis.
-        adjoint_circuit = qft(circuit=minimization_oracle_circuit, n=number_ancillary_qubits_required).inverse()
-        minimization_oracle_circuit2 = minimization_oracle_circuit.compose(adjoint_circuit)
-
-    load_values_in_arr()
 
 
 
@@ -124,6 +90,49 @@ def minimization_oracle(circuit: QuantumCircuit, data_register_q: QuantumRegiste
     #         qml.PauliX(wires=ancillary_register[-1])
 
     qml.adjoint(fn=load_values_in_arr)()  # Cleanup.
+
+
+def load_values_in_arr(circuit: QuantumCircuit, n_ancillary_qubits: int, n_data_qubits: int, arr: List[int]):
+    """
+    Conditionally load all the values in arr onto the axcillary register.
+    """
+    circuit_for_recovery = circuit.copy()
+
+    # Perform a QFT, so we can add values in the Fourier basis.
+    qft(circuit=circuit, n=n_ancillary_qubits)
+
+    # Loop through each of the data wires, preforming controlled additions.
+    for j in range(n_data_qubits):
+        print(j)
+        data_reg_q = QuantumRegister(n_data_qubits, 'data_q')
+        ancillary_reg_q = QuantumRegister(n_ancillary_qubits, 'ancillary_q')
+
+        k_addition_circuit = QuantumCircuit(ancillary_reg_q, data_reg_q)
+        for n in range(n_ancillary_qubits):
+            k_addition_circuit.crz(arr[j] * pi / (2 ** j), n_ancillary_qubits + j, n)
+        # custom_rotation = k_addition_circuit.to_gate().control(num_ctrl_qubits=1)
+        circuit = circuit.compose(k_addition_circuit)
+
+        # controlled_rotation = add_k_fourier(k=arr[j], wires=ancillary_register_q).control(2)
+        # minimization_oracle.ctrl(op=add_k_fourier(k=arr[j], wires=ancillary_register_q), control=data_register_q[j])
+
+    # Return to the computational basis.
+    adjoint_circuit = qft(circuit=circuit_for_recovery, n=n_ancillary_qubits).inverse()
+    circuit = circuit.compose(adjoint_circuit)
+
+    return circuit
+
+
+def add_k_fourier(circuit: QuantumCircuit, k: int, reg: QuantumRegister) -> None:
+    """
+    Add the integer value k to wires.
+    :return: None, operation is done in place.
+    """
+    k_addition_circuit = QuantumCircuit(2)
+
+    for j in reg.size():
+        circuit.rz(phi=k * pi / (2 ** j), qubit=reg[j])
+        to_gate().num_ctrl_qubits=1
 
 
 def minimization_circuit(arr: List[int], x: int) -> QuantumCircuit:
