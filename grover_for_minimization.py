@@ -12,6 +12,7 @@ import math
 
 import numpy as np
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
+from qiskit.circuit.library import GroverOperator
 from qiskit.providers.aer import QasmSimulator
 from qiskit.visualization import plot_histogram
 
@@ -20,133 +21,125 @@ import matplotlib.pyplot as plt
 from numpy import pi as pi
 from typing import List
 
+from qft import qft
 
-def minimization_oracle(data_register: List[int], ancillary_register: List[int], arr: List[int], x: int) -> None:
+
+def minimization_oracle(circuit: QuantumCircuit, data_register_q: QuantumRegister,
+                        ancillary_register_q: QuantumRegister, arr: List[int], x: int) -> QuantumCircuit:
     """
-    Marking oracle that flips the signs of those elements that satisfies the minimization condition.
+    Marking oracle that flips the sign of elements that satisfy the minimization condition.
         That is: mark states |i> (take |i> to -|i> if arr[i] < x).
 
-    :param data_register: List of ints:
-        Our main data qubits.
-    :param ancillary_register: List of ints:
-        Our helper qubits.
-    :param arr: List of ints.
-    :param x: int.
-
-    :return: None, operation is done in place.
+    :param circuit:
+    :param data_register_q:
+    :param ancillary_register_q:
+    :param arr:
+    :param x:
+    :return:
     """
+    # We need one wire in the data register for each element of arr.
+    number_of_data_qubits_required = len(arr)
+    data_register_q = QuantumRegister(number_of_data_qubits_required, 'data_q')
 
-    def add_k_fourier(k: int, wires: List[int]) -> None:
+    # Measurment results from the data register will go here.
+    data_register_c = ClassicalRegister(number_of_data_qubits_required, "data_c")
+
+    # We need enough ancillary qubits to represent 0 -> sum(arr) or x, whichever is larger.
+    #  Recall you can represent up to 2^n - 1 with n bits.
+    number_ancillary_qubits_required = max(math.ceil(math.log(sum(arr) + 1, 2)), math.ceil(math.log(x + 1, 2)))
+    ancillary_register_q = QuantumRegister(number_ancillary_qubits_required, 'ancillary_q')
+    # Ancillary bits are just work bits, we won't need to measure them.
+
+    print("Data Register:")
+    print(data_register_q)
+    print("Ancillary Register:")
+    print(ancillary_register_q)
+
+    oracle_circuit = QuantumCircuit(ancillary_register_q, data_register_q)
+    oracle_circuit_for_cleanup = oracle_circuit.copy()
+
+    # Perform a QFT, so we can add values in the Fourier basis.
+    oracle_circuit = qft(circuit=oracle_circuit, n=number_ancillary_qubits_required)
+
+    oracle_circuit.barrier(ancillary_register_q)
+
+    # Perform inverse QFT to return to the computational basis.
+    adjoint_circuit = qft(circuit=oracle_circuit_for_cleanup, n=number_ancillary_qubits_required).inverse()
+    oracle_circuit.compose(adjoint_circuit, inplace=True)
+
+    # Draw the circuit
+    oracle_circuit.draw(output='mpl')
+    plt.show()
+
+    def add_k_fourier(k: int, reg: QuantumRegister) -> None:
         """
         Add the integer value k to wires.
         :return: None, operation is done in place.
         """
-        for j in range(len(wires)):
-            circuit.rz(phi=k * pi / (2 ** j), wires=wires[j])
+        for j in reg.size():
+            circuit.rz(phi=k * pi / (2 ** j), qubit=reg[j])
 
     def load_values_in_arr():
         """
         Conditionally load all the values in arr onto the axcillary register.
         """
         # Perform a QFT, so we can add values in the Fourier basis.
-        qml.QFT(wires=ancillary_register)
+        qft(circuit=minimization_oracle_circuit, n=number_ancillary_qubits_required)
 
-        # Loop through each of the data wires, preforming controlled additions.
-        for wire in data_register:
-            qml.ctrl(op=add_k_fourier, control=wire)(k=arr[wire], wires=ancillary_register)
+        # Draw the circuit
+        minimization_oracle_circuit.draw(output='mpl')
+        plt.show()
+
+        # # Loop through each of the data wires, preforming controlled additions.
+        # for j in data_register_q.size():
+        #     controlled_rotation = add_k_fourier(k=arr[j], wires=ancillary_register_q).control(2)
+        #     minimization_oracle.ctrl(op=add_k_fourier(k=arr[j], wires=ancillary_register_q), control=data_register_q[j])
 
         # Return to the computational basis.
-        qml.adjoint(fn=qml.QFT(wires=ancillary_register))
+        adjoint_circuit = qft(circuit=minimization_oracle_circuit, n=number_ancillary_qubits_required).inverse()
+        minimization_oracle_circuit2 = minimization_oracle_circuit.compose(adjoint_circuit)
 
     load_values_in_arr()
 
-    # Loop thorugh all integers in the range 1 to x-1. Notice we start at 1 because the all 0's state would always be
-    #  marked. Anyway, in the TSP context arr should never contain any 0's. If we get a sum of elements on the
-    #  ancillary wires that is < x, then there must be at least one element in arr that is less than x.
-    for i in range(1, x):
 
-        # qml.FlipSign(i, wires=ancillary_register)
-        # # To improve sucess, we replace the phase inversion by a phase rotation through phi.
 
-        # Implement flip_sign in pauli primatives
-        arr_bin = to_list(n=i, n_wires=len(ancillary_register))  # Turn i into a state.
-
-        if arr_bin[-1] == 0:
-            qml.PauliX(wires=ancillary_register[-1])
-
-        qml.ctrl(qml.PauliZ, control=ancillary_register[:-1], control_values=arr_bin[:-1])(
-                     wires=ancillary_register[-1])
-
-        if arr_bin[-1] == 0:
-            qml.PauliX(wires=ancillary_register[-1])
+    # # Loop thorugh all integers in the range 1 to x-1. Notice we start at 1 because the all 0's state would always be
+    # #  marked. Anyway, in the TSP context arr should never contain any 0's. If we get a sum of elements on the
+    # #  ancillary wires that is < x, then there must be at least one element in arr that is less than x.
+    # for i in range(1, x):
+    #
+    #     # qml.FlipSign(i, wires=ancillary_register)
+    #     # # To improve sucess, we replace the phase inversion by a phase rotation through phi.
+    #
+    #     # Implement flip_sign in pauli primatives
+    #     arr_bin = to_list(n=i, n_wires=len(ancillary_register))  # Turn i into a state.
+    #
+    #     if arr_bin[-1] == 0:
+    #         qml.PauliX(wires=ancillary_register[-1])
+    #
+    #     qml.ctrl(qml.PauliZ, control=ancillary_register[:-1], control_values=arr_bin[:-1])(
+    #                  wires=ancillary_register[-1])
+    #
+    #     if arr_bin[-1] == 0:
+    #         qml.PauliX(wires=ancillary_register[-1])
 
     qml.adjoint(fn=load_values_in_arr)()  # Cleanup.
 
 
-def minimization_circuit(data_register: List[int], ancillary_register: List[int], arr: List[int], x: int,
-                         ret: str = "sample") -> list:
+def minimization_circuit(arr: List[int], x: int) -> QuantumCircuit:
     """
-    A quantum circuit to find a value in arr that is less than x.
+    Build a quantum minimization circuit.
 
-    :param data_register: List of ints:
-        Our main data qubits.
-    :param ancillary_register: List of ints:
-        Our helper qubits.
     :param arr: list of ints.
     :param x: int.
-    :param ret: str (optional; default is "sample"):
-        "sample": return sample.
-        "probs": return probabilities.
-    :return:
-    """
 
-    # Step 1: Create an equal superposition by applying a Hadamard to each wire in the data register.
-    # Add a H gate on qubit 0
-    circuit.h(0)
-    for wire in data_register:
-        qml.Hadamard(wires=wire)
-
-    # Compute some of the parameters defined in Long et al.
-    beta = math.asin(1 / math.sqrt(len(arr)))
-    j_op = math.floor((pi / 2 - beta) / (2 * beta))
-    j = j_op + 1
-    phi = 2 * math.asin(math.sin(pi / (4 * j + 6)) / math.sin(beta))
-
-    print("phi: " + str(phi))
-    print("j_op: " + str(j_op))
-    print("j: " + str(j))
-    print("beta: " + str(beta))
-
-    # Upon measurment at the (J + 1)th iteration, the marked state is obtained with quasi-certainty.
-    for _ in range(j + 1):
-        # Step 2: Use the oracle to mark solution states.
-        minimization_oracle(data_register=data_register, ancillary_register=ancillary_register, arr=arr, x=x, phi=pi)
-
-        # Step 3: Apply the Grover operator to amplify the probability of getting the correct solution.
-        qml.GroverOperator(wires=data_register)
-
-    if ret == "probs":
-        return qml.probs(wires=data_register)
-    else:
-        return qml.sample(wires=data_register)
-
-
-def grover_for_minimization(arr: List[int], x: int) -> bool:
-    """
-    Use Grover's search to check if arr contains an element < x.
-
-    Important Precondition:
-        arr must contain integer values strickly > 0.
-
-    :return: bool:
-        True: We found an element in arr < x.
-        False: otherwise.
+    :return: Minimization circuit.
     """
     # We need one wire in the data register for each element of arr.
     number_of_data_qubits_required = len(arr)
     data_register_q = QuantumRegister(number_of_data_qubits_required, 'data_q')
 
-    # We will need to project measurements from
+    # Measurment results from the data register will go here.
     data_register_c = ClassicalRegister(number_of_data_qubits_required, "data_c")
 
     # We need enough ancillary qubits to represent 0 -> sum(arr) or x, whichever is larger.
@@ -161,7 +154,41 @@ def grover_for_minimization(arr: List[int], x: int) -> bool:
     # Create a Quantum Circuit
     circuit = QuantumCircuit(data_register_q, ancillary_register_q, data_register_c)
 
+    # Step 1: Create an equal superposition by applying a Hadamard to each wire in the data register.
+    for wire in data_register_q:
+        circuit.h(wire)
+
+    circuit.barrier(data_register_q)
+
+    # Upon measurment at the
+    j = 1
+    for _ in range(j):
+        # Step 2: Use the oracle to mark solution states.
+        oracle = minimization_oracle(circuit=circuit, data_register_q=data_register_q,
+                                     ancillary_register_q=ancillary_register_q, arr=arr, x=x)
+
+        grover_op = GroverOperator(oracle=oracle, insert_barriers=True)
+
+        # Step 3: Apply the Grover operator to amplify the probability of getting the correct solution.
+        circuit.GroverOperator(wires=data_register)
+
     circuit.measure(data_register_q, data_register_c)
+
+    return circuit
+
+
+def grover_for_minimization(arr: List[int], x: int) -> bool:
+    """
+    Use Grover's search to check if arr contains an element < x.
+
+    Important Precondition:
+        arr must contain integer values strickly > 0.
+
+    :return: bool:
+        True: We found an element in arr < x.
+        False: otherwise.
+    """
+    circuit = minimization_circuit(arr=arr, x=x)
 
     # Draw the circuit
     circuit.draw(output='mpl')

@@ -48,6 +48,7 @@ def qft(circuit, n):
         QFT is performed on the first n qubits
     :return: The transformed circuit.
     """
+    circuit = circuit.copy()
     qft_rotations(circuit, n)
     swap_registers(circuit, n)
     return circuit
