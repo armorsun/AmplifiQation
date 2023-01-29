@@ -6,8 +6,8 @@ iQuHACK 2023
 Find the minimum value in a list using the Durr & Hoyer Quantum algorithm for minimzation:
 C. Durr and P. Hoyer, “A Quantum Algorithm for Finding the Minimum,” 1996, doi: 10.48550/arxiv.quant-ph/9607014.
 """
-from grover_for_minimization import grover_for_minimization
 
+from grover_for_minimization import grover_for_minimization
 
 def grover_enhanced_minimization(arr: list[int], _lower_bound: int = 0, _upper_bound: int = None,
                                  verbose: bool = False) -> int:
@@ -29,6 +29,7 @@ def grover_enhanced_minimization(arr: list[int], _lower_bound: int = 0, _upper_b
     :return: int:
         The smallest value in arr.
     """
+
     if _upper_bound is None:
         # First iteration. For an initial upper bound, just use the first element in arr. Worst case, this is the
         #  biggest element.
