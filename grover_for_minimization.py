@@ -71,6 +71,7 @@ def minimization_oracle(circuit: QuantumCircuit, data_register_q: QuantumRegiste
         sign_flip_circuit = QuantumCircuit(ancillary_register_q, data_register_q)
 
         binary_list = to_list(n=i, n_wires=number_ancillary_qubits_required)
+        print(binary_list)
 
         # qml.FlipSign(i, wires=ancillary_register)
         # # To improve sucess, we replace the phase inversion by a phase rotation through phi.
@@ -82,8 +83,12 @@ def minimization_oracle(circuit: QuantumCircuit, data_register_q: QuantumRegiste
             sign_flip_circuit.x(ancillary_register_q[-1])
 
         sign_flip_circuit.h(ancillary_register_q[-1])
-        sign_flip_circuit.mct(control_qubits=binary_list[:-1], target_qubit=ancillary_register_q[-1],
-                              ancilla_qubits=ancillary_register_q[:-1])
+
+        # Draw the circuit
+        sign_flip_circuit.draw(output='mpl')
+        plt.show()
+
+        sign_flip_circuit.mcx(control_qubits=binary_list[:-1], target_qubit=ancillary_register_q[-1])
         sign_flip_circuit.h(ancillary_register_q[-1])
 
         #
