@@ -231,7 +231,7 @@ def grover_for_minimization(arr: List[int], x: int) -> bool:
     circuit = minimization_circuit(arr=arr, x=x)
 
     # Execute the circuit on the qasm simulator.
-    backend = AerSimulator()
+    backend = Aer.get_backend('unitary_simulator')
     qc_compiled = transpile(circuit, backend)
 
     job_sim = backend.run(qc_compiled, shots=1024)
