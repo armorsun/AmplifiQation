@@ -1,5 +1,4 @@
 import os
-import covalent as ct
 import qiskit as qt
 from qiskit import QuantumCircuit, Aer
 from qiskit.compiler import transpile
@@ -8,12 +7,7 @@ from qiskit_ibm_runtime import Estimator, QiskitRuntimeService, Session
 from qiskit import IBMQ
 
 class RNG:
-    """
-    Random Number Generator either by simulating or running on an actual QC.
-
-    _token: IBM token of user
-    _backend: 0 for local simulator, 1 for IBM sim, 2 for QC
-    """
+    # _backend: 0 for local simulator, 1 for IBM sim, 2 for QC
     backend: str
 
     def __init__(self, token: str, backend: int) -> None:
