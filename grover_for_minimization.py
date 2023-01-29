@@ -189,9 +189,13 @@ def minimization_circuit(arr: List[int], x: int) -> QuantumCircuit:
         oracle = minimization_oracle(circuit=circuit, data_register_q=data_register_q,
                                      ancillary_register_q=ancillary_register_q, arr=arr, x=x)
 
+        # Draw the circuit
+        oracle.draw(output='mpl')
+        plt.show()
+
         grover_op = GroverOperator(oracle=oracle, insert_barriers=True)
 
-        circuit.GroverOperator(wires=data_register)
+        circuit = circuit.compose(grover_op)
 
     circuit.measure(data_register_q, data_register_c)
 
