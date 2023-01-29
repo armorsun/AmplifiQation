@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - ./pg_data/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=iQuHack
+    networks:
+      - backnet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: backend
+    restart: always
+    volumes:
+      - ./backend_output/:/code/output/
+    ports:
+      - 8000:8000
+    networks:
+      - backnet
+      - frontnet
+    environment:
+      - FLASK_ENV=development
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=8000
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - IBM_QUANTUM_TOKEN=${IBM_QUANTUM_TOKEN}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  proxy:
+    build: proxy
+    restart: always
+    ports:
+      - 80:80
+    depends_on: 
+      - backend
+    networks:
+      - frontnet
+
+networks:
+  backnet:
+  frontnet:

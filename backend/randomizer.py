@@ -3,14 +3,8 @@ import qiskit as qt
 from qiskit import QuantumCircuit, Aer
 from qiskit import IBMQ
 
-
 class RNG:
-    """
-    Random Number Generator either by simulating or running on an actual QC.
-
-    _token: IBM token of user
-    _backend: 0 for local simulator, 1 for IBM sim, 2 for QC
-    """
+    # _backend: 0 for local simulator, 1 for IBM sim, 2 for QC
     backend: str
 
     def __init__(self, backend: int, token) -> None:
