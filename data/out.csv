@@ -1,3 +1,4 @@
+name,city,latitude,longitude,opening_time,closing_time,average_time_spent,category
 DASHA,Toronto,43.6532,-79.3831,09:00:00,17:00:00,03:00:00,food
 416 Snack Bar,Toronto,43.6476,-79.4039,09:00:00,17:00:00,03:50:20,food
 Toronto Pizza,Toronto,43.6393,-79.3193,07:00:00,20:00:00,02:41:12,food
