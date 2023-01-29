@@ -17,8 +17,9 @@ from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, transpile
 from qiskit.circuit.library import GroverOperator
 from qiskit import Aer
 from qiskit.visualization import plot_histogram
+import covalent as ct
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 from numpy import pi as pi
 from typing import List
@@ -26,6 +27,8 @@ from typing import List
 from qiskit_aer import AerSimulator
 
 from qft import qft
+
+from qiskit import IBMQ
 
 
 def minimization_oracle(arr: List[int], x: int) -> QuantumCircuit:
@@ -207,14 +210,14 @@ def minimization_circuit(arr: List[int], x: int) -> QuantumCircuit:
         circuit = circuit.compose(grover_op)
 
     # Draw the minimization oracle
-    oracle.draw(output='mpl')
-    plt.show()
+    #oracle.draw(output='mpl')
+    #plt.show()
 
     circuit.barrier(quantum_data_register)  # Just to ease of visulation.
     circuit.measure(quantum_data_register, classical_data_register)
     return circuit
 
-
+@ct.lattice
 def grover_for_minimization(arr: List[int], x: int) -> bool:
     """
     Use Grover's search to check if arr contains an element < x.
@@ -228,18 +231,35 @@ def grover_for_minimization(arr: List[int], x: int) -> bool:
         True: We found an element in arr < x.
         False: otherwise.
     """
+    local_sim = False
+    backend = 1
+
     circuit = minimization_circuit(arr=arr, x=x)
 
-    # Execute the circuit on the qasm simulator.
-    backend = AerSimulator()
-    qc_compiled = transpile(circuit, backend)
+    if local_sim:
+        # Execute the circuit on the qasm simulator.
+        backend = AerSimulator()
+        qc_compiled = transpile(circuit, backend)
 
-    job_sim = backend.run(qc_compiled, shots=1024)
+        job_sim = backend.run(qc_compiled, shots=1024)
 
-    # Grab the results from the job.
-    result_sim = job_sim.result()
+        # Grab the results from the job.
+        result_sim = job_sim.result()
+        counts = result_sim.get_counts(qc_compiled)
 
-    counts = result_sim.get_counts(qc_compiled)
+    else:
+        IBMQ.save_account(token)
+        IBMQ.load_account()
+
+        provider = IBMQ.get_provider(hub='ibm-q')
+        if backend == 0:
+            IBM_backend = provider.get_backend('ibm_nairobi')
+        elif backend == 1:
+            IBM_backend = provider.get_backend('simulator_stabilizer')
+
+        job = qt.execute(circuit, IBM_backend, shots=1)
+        counts = job.result().get_counts()
+
     print(counts)
 
     # # Draw the circuit
