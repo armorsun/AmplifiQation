@@ -2,7 +2,6 @@
 Author: AmplifiQation
 
 iQuHACK 2023
-
 """
 from typing import Dict
 

@@ -2,8 +2,6 @@
 Author: AmplifiQation
 
 iQuHACK 2023
-
-# TODO:
 """
 
 
