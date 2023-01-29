@@ -86,7 +86,7 @@ def find_hamiltonian_cycles(graph, pos, path, visited, out_file, f):
 
             # Update the hasCycle as true
             hasCycle = True
-        return
+        return None
 
     # Try different vertices as the next vertex
     for v in range(len(graph)):

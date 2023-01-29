@@ -56,6 +56,8 @@ class RNG:
         for i in range(num_qubits):
             circuit.measure(i, i)
 
+        # circuit.draw(output='mpl')
+
         job = qt.execute(circuit, backend=self.backend, shots=1)
         counts = job.result().get_counts()
         return int(list(counts)[0], 2)
