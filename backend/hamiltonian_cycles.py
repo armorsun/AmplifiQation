@@ -51,10 +51,11 @@ def hamiltonian_cycle(graph):
     out_dir = str(pathlib.Path().resolve().parent.resolve()) + "\\data"
     out_file = out_dir + "\\hamiltonian_cycles_temp.txt"
     open(out_file, 'w+').close()
+    f = open(out_file, 'a+')
 
     # Function call to find all hamiltonian cycles
-    find_hamiltonian_cycles(graph, 1, path, visited, out_file=out_file)
-    print(path)
+    find_hamiltonian_cycles(graph, 1, path, visited, out_file, f)
+    f.close()
 
     if hasCycle:
         # If no Hamiltonian Cycle is possible for the given graph
@@ -62,12 +63,11 @@ def hamiltonian_cycle(graph):
         return
 
 
-def find_hamiltonian_cycles(graph, pos, path, visited, out_file):
+def find_hamiltonian_cycles(graph, pos, path, visited, out_file, f):
     """
     Recursive function to find all hamiltonian cycles.
     """
 
-    f = open(out_file, 'a+')
     # If all vertices are included in Hamiltonian Cycle.
     if pos == len(graph):
 
@@ -96,7 +96,7 @@ def find_hamiltonian_cycles(graph, pos, path, visited, out_file):
             visited[v] = True
 
             # Recur to construct rest of the path
-            find_hamiltonian_cycles(graph, pos + 1, path, visited, out_file)
+            find_hamiltonian_cycles(graph, pos + 1, path, visited, out_file, f)
 
             # Remove current vertex from path and process other vertices
             visited[v] = False
