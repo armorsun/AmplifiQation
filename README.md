@@ -1,12 +1,12 @@
 # pyROUTE
 
-```pyROUTE``` is a user-centric route optimization and itinerary schedualling solution developed by AmplifiQation.
+```pyROUTE``` is a user-centric route optimization and itinerary scheduling solution developed by AmplifiQation.
 
-Adaptable, and enginmeered for scalability, ```pyROUTE``` delivers quantum enhanced tools for:
+Adaptable, and engineered for scalability, ```pyROUTE``` delivers quantum enhanced tools for:
 
 - Evening and hang-out planning;
-- Vaccation and buisness-trip schedualling;
-- and logistics and supply-chain managament.
+- Vacation and business-trip scheduling;
+- and logistics and supply-chain management.
 
 ```pyROUTE``` is available under the MIT license [here](/LICENSE).
 
@@ -31,7 +31,7 @@ By preparing and measuring a Bell State, ```pyROUTE``` empowers the user with th
 
 ## Quantum-enhanced TSP (travelling salesman problem) solver
 
-By running the Durr and Hoyer algorithm [1] on precomputed Hamiltonian cycles, ```pyROUTE``` provides a quantum-enhanced routing optimizer.
+By running the Dürr and Høyer algorithm [1] on precomputed Hamiltonian cycles, ```pyROUTE``` provides a quantum-enhanced routing optimizer.
 
 [1] C. Dürr and P. Høyer, “A Quantum Algorithm for Finding the Minimum,” 1996. https://arxiv.org/abs/quant-ph/9607014.
 
@@ -58,7 +58,7 @@ curl http://localhost/PyROUTE
 
 While ```pyROUTE``` serves as a value proof-of-concept, the AmplifiQation has yet to:
 
-- Enhance ```pyROUTE``` with real-world data from Goolge Maps API;
+- Enhance ```pyROUTE``` with real-world data from Google Maps API;
 - Integrate temporal data and opening times into the core solver;
 - or, further explore quantum graph algorithms are their respective speedups;
 - build a graphical user interface.
@@ -66,7 +66,7 @@ While ```pyROUTE``` serves as a value proof-of-concept, the AmplifiQation has ye
 
 # iQuHACK 2023
 
-iQuHACK is a faced-paced, valuable learning experience accessable to all levels of quantum experience. The AmplifiQation team highly recommends you consider applying for further.
+iQuHACK is a faced-paced, valuable learning experience accessible to all levels of quantum experience. The AmplifiQation team highly recommends you consider applying for further.
 
 iQuHACK was made possible by a dedicated organizing committee and generous sponsor supports.
 
