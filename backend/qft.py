@@ -6,15 +6,17 @@ iQuHACK 2023
 Sourced from https://qiskit.org/textbook/ch-algorithms/quantum-fourier-transform.html#generalqft.
 """
 from math import pi
+from qiskit import QuantumCircuit
 
 
-def qft_rotations(circuit, n):
+def qft_rotations(circuit: QuantumCircuit, n: int):
     """
     Performs qft on the first n qubits in circuit (without swaps)
-    :param circuit:
-    :param n: int:
+    param circuit: QuantumCircuit
+    param n: int
         Number of qubits.
-    :return: None. Operation is done in place.
+    return None
+        Operation is done in place.
     """
     if n == 0:
         return circuit
@@ -27,24 +29,25 @@ def qft_rotations(circuit, n):
     qft_rotations(circuit, n)
 
 
-def swap_registers(circuit, n):
+def swap_registers(circuit: QuantumCircuit, n: int) -> QuantumCircuit:
     """
     Performs the swaps
-    :param circuit:
-    :param n: int:
+    :param circuit: QuantumCircuit
+    :param n: int
         Swaps are performed on the first n qubits.
-    :return: The transformed circuit.
+    :return: QuantumCircuit
+        Returns the transformed circuit
     """
     for qubit in range(n//2):
         circuit.swap(qubit, n-qubit-1)
     return circuit
 
 
-def qft(circuit, n):
+def qft(circuit: QuantumCircuit, n: int) -> QuantumCircuit:
     """
     QFT on the first n qubits in circuit.
-    :param circuit:
-    :param n:
+    :param circuit: QuantumCircuit
+    :param n: int
         QFT is performed on the first n qubits
     :return: The transformed circuit.
     """
