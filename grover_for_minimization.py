@@ -56,40 +56,48 @@ def minimization_oracle(circuit: QuantumCircuit, data_register_q: QuantumRegiste
     print(ancillary_register_q)
 
     oracle_circuit = QuantumCircuit(ancillary_register_q, data_register_q)
-    oracle_circuit_for_cleanup = oracle_circuit.copy()
 
     # Conditionally load all the values in arr onto the axcillary register.
     oracle_circuit = load_values_in_arr(circuit=oracle_circuit, n_ancillary_qubits=number_ancillary_qubits_required,
                                         n_data_qubits=number_of_data_qubits_required, arr=arr)
 
-    # Draw the circuit.
-    oracle_circuit.draw(output='mpl')
-    plt.show()
+    oracle_circuit_for_cleanup = oracle_circuit.inverse().copy()
 
+    # Loop thorugh all integers in the range 1 to x-1. Notice we start at 1 because the all 0's state would always be
+    #  marked. Anyway, in the TSP context arr should never contain any 0's. If we get a sum of elements on the
+    #  ancillary wires that is < x, then there must be at least one element in arr that is less than x.
+    for i in range(1, x):
 
+        sign_flip_circuit = QuantumCircuit(ancillary_register_q, data_register_q)
 
+        binary_list = to_list(n=i, n_wires=number_ancillary_qubits_required)
 
-    # # Loop thorugh all integers in the range 1 to x-1. Notice we start at 1 because the all 0's state would always be
-    # #  marked. Anyway, in the TSP context arr should never contain any 0's. If we get a sum of elements on the
-    # #  ancillary wires that is < x, then there must be at least one element in arr that is less than x.
-    # for i in range(1, x):
-    #
-    #     # qml.FlipSign(i, wires=ancillary_register)
-    #     # # To improve sucess, we replace the phase inversion by a phase rotation through phi.
-    #
-    #     # Implement flip_sign in pauli primatives
-    #     arr_bin = to_list(n=i, n_wires=len(ancillary_register))  # Turn i into a state.
-    #
-    #     if arr_bin[-1] == 0:
-    #         qml.PauliX(wires=ancillary_register[-1])
-    #
-    #     qml.ctrl(qml.PauliZ, control=ancillary_register[:-1], control_values=arr_bin[:-1])(
-    #                  wires=ancillary_register[-1])
-    #
-    #     if arr_bin[-1] == 0:
-    #         qml.PauliX(wires=ancillary_register[-1])
+        # qml.FlipSign(i, wires=ancillary_register)
+        # # To improve sucess, we replace the phase inversion by a phase rotation through phi.
 
-    qml.adjoint(fn=load_values_in_arr)()  # Cleanup.
+        # # Implement flip_sign in pauli primatives
+        # arr_bin = to_list(n=i, n_wires=len(ancillary_register))  # Turn i into a state.
+
+        if binary_list[-1] == 0:
+            sign_flip_circuit.x(ancillary_register_q[-1])
+
+        sign_flip_circuit.h(ancillary_register_q[-1])
+        sign_flip_circuit.mct(control_qubits=binary_list[:-1], target_qubit=ancillary_register_q[-1],
+                              ancilla_qubits=ancillary_register_q[:-1])
+        sign_flip_circuit.h(ancillary_register_q[-1])
+
+        #
+        # for n in range(number_ancillary_qubits_required):
+        #     sign_flip_circuit.crz(arr[j] * pi / (2 ** j), n_ancillary_qubits + j, n)
+        #
+        # qml.ctrl(qml.PauliZ, control=ancillary_register[:-1], control_values=arr_bin[:-1])(
+        #              wires=ancillary_register[-1])
+
+        if binary_list[-1] == 0:
+            sign_flip_circuit.x(ancillary_register_q[-1])
+
+    circuit = circuit.compose(oracle_circuit_for_cleanup)  # Cleanup.
+    return circuit
 
 
 def load_values_in_arr(circuit: QuantumCircuit, n_ancillary_qubits: int, n_data_qubits: int, arr: List[int]):
@@ -123,16 +131,25 @@ def load_values_in_arr(circuit: QuantumCircuit, n_ancillary_qubits: int, n_data_
     return circuit
 
 
-def add_k_fourier(circuit: QuantumCircuit, k: int, reg: QuantumRegister) -> None:
+def to_list(n, n_wires):
     """
-    Add the integer value k to wires.
-    :return: None, operation is done in place.
+    This function is copy and pasted straight out of PennyLane!
+    Convert an integer into a binary integer list
+    Args:
+        n (int): Basis state as integer
+        n_wires (int): Numer of wires to transform the basis state
+    Raises:
+        ValueError: "cannot encode n with n wires "
+    Returns:
+        (array[int]): integer binary array
     """
-    k_addition_circuit = QuantumCircuit(2)
+    # From PennyLane
+    if n >= 2 ** n_wires:
+        raise ValueError(f"cannot encode {n} with {n_wires} wires ")
 
-    for j in reg.size():
-        circuit.rz(phi=k * pi / (2 ** j), qubit=reg[j])
-        to_gate().num_ctrl_qubits=1
+    b_str = f"{n:b}".zfill(n_wires)
+    bin_list = [int(i) for i in b_str]
+    return bin_list
 
 
 def minimization_circuit(arr: List[int], x: int) -> QuantumCircuit:
