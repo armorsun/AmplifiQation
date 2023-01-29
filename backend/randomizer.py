@@ -11,7 +11,7 @@ import os
 import qiskit as qt
 from qiskit import QuantumCircuit, Aer
 from qiskit import IBMQ
-# import covalent as ct
+import covalent as ct
 
 
 class RNG:
@@ -37,7 +37,7 @@ class RNG:
         else:
             self.backend = Aer.get_backend('qasm_simulator')
 
-    # @ct.electron
+    @ct.electron
     def randomizer_circuit(self, num_qubits: int) -> int:
         """
         Returns a random integer based on the number of qubits available.

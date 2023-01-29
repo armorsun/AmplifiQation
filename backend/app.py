@@ -4,7 +4,7 @@ from flask import Flask, render_template
 import randomizer
 import covalent as ct
 import pandas as pds
-import Hamiltonian
+import grover_for_minimization
 from sqlalchemy import create_engine
 
 app = Flask(__name__)
@@ -36,14 +36,23 @@ def random():
     print(random_number)
     return str(random_number)
 
-@app.route('/pandas')
-@ct.lattice
-def pandas():
-    conn = get_pandas_db()
-    dataFrame = pds.read_sql("select * from locations", conn);
-    hamiltonian = Hamiltonian.Hamiltonian(dataFrame);
-    distance_matrix = hamiltonian.get_distance_matrix(4)
-    print(distance_matrix)
-    conn.close();
-    return "pandas"
+#@app.route('/pandas')
+#@ct.lattice
+#def pandas():
+#    conn = get_pandas_db()
+#    dataFrame = pds.read_sql("select * from locations", conn);
+#    hamiltonian = Hamiltonian.Hamiltonian(dataFrame);
+#    distance_matrix = hamiltonian.get_distance_matrix(4)
+#    print(distance_matrix)
+#    conn.close();
+#    return "pandas"
     
+@app.route('/PyROUTE')
+@ct.lattice
+def PyROUTE():
+    arr_ = [18, 10, 6, 7]
+    x_ = 3
+    found_number_smaller_than_x = grover_for_minimization.grover_for_minimization(arr=arr_, x=x_)
+    print("Found a number smaller than x: " + str(found_number_smaller_than_x))
+
+    return "Found a number smaller than x: " + str(found_number_smaller_than_x)
