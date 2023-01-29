@@ -1,10 +1,6 @@
 import os
-import covalent as ct
 import qiskit as qt
 from qiskit import QuantumCircuit, Aer
-from qiskit.compiler import transpile
-from qiskit.quantum_info import SparsePauliOp
-from qiskit_ibm_runtime import Estimator, QiskitRuntimeService, Session
 from qiskit import IBMQ
 
 
@@ -17,7 +13,7 @@ class RNG:
     """
     backend: str
 
-    def __init__(self, token: str, backend: int) -> None:
+    def __init__(self, backend: int, token) -> None:
         IBMQ.save_account(token)
         IBMQ.load_account()
         provider = IBMQ.get_provider(hub='ibm-q')
