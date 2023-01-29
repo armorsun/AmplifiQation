@@ -1,0 +1,101 @@
+DASHA,Toronto,43.6532,-79.3831,09:00:00,17:00:00,03:00:00,food
+416 Snack Bar,Toronto,43.6476,-79.4039,09:00:00,17:00:00,03:50:20,food
+Toronto Pizza,Toronto,43.6393,-79.3193,07:00:00,20:00:00,02:41:12,food
+Avelo Resturant,Toronto,43.6126,-79.4039,08:00:00,21:00:00,04:53:11,food
+Canoe Restaurant and Bar,Toronto,43.6026,-79.4182,07:00:00,19:00:00,01:00:03,food
+Richmond Station,Toronto,43.6096,-79.4924,10:00:00,20:00:00,04:12:02,food
+Oji Seichi,Toronto,43.6206,-79.3999,13:00:00,21:00:00,03:24:15,food
+Grey Gardens,Toronto,43.6426,-79.4109,09:00:00,17:00:00,03:30:36,food
+Sotto Sotto,Toronto,43.6104,-79.2942,07:00:00,19:00:00,02:54:55,food
+Constantine,Toronto,43.6238,-79.4732,10:00:00,21:00:00,03:24:26,food
+Gusto 101,Toronto,43.6476,-79.4039,09:00:00,19:00:00,03:23:17,food
+Dreyfus,Toronto,43.6476,-79.4039,07:00:00,21:00:00,03:12:53,food
+Bar Raval,Toronto,43.6476,-79.4039,09:00:00,22:00:00,03:14:52,food
+Sunnybrook Park,Toronto,43.6134,-79.4631,07:00:00,22:00:00,02:12:22,parks
+Kew Gardens,Toronto,43.6272,-79.4931,06:00:00,21:00:00,01:12:23,parks
+Earlscourt Park,Toronto,43.681,-79.4269,08:00:00,22:00:00,04:14:52,parks
+Withrow Park,Toronto,43.6289,-79.4972,09:00:00,20:00:00,05:10:12,parks
+Riveradale Park East,Toronto,43.6325,-79.4976,10:00:00,19:00:00,01:45:18,parks
+Trillium Park,Toronto,43.6269,-79.4986,09:00:00,22:00:00,03:42:22,parks
+Baird Park,Toronto,43.628,-79.4118,07:00:00,20:00:00,01:17:12,parks
+Campbell Park,Toronto,43.6893,-79.4792,08:00:00,21:00:00,05:20:42,parks
+St. James Park,Toronto,43.6892,-79.4098,06:00:00,19:00:00,03:22:53,parks
+Stanley Park,Toronto,43.6217,-79.437,06:00:00,22:00:00,02:30:23,parks
+Greenwood Park,Toronto,43.6098,-79.1532,07:00:00,21:00:00,01:17:35,parks
+Sherwood Park,Toronto,43.6028,-79.0981,09:00:00,20:00:00,06:12:16,parks
+Earl Bales Park,Toronto,43.6082,-79.4082,10:00:00,22:00:00,03:24:42,parks
+Ripleys Aquarium of Canada,Toronto,43.6124,-79.4731,10:00:00,19:00:00,04:52:11,activity
+Royal Ontario Museum,Toronto,43.6158,-79.4178,09:00:00,18:00:00,03:32:11,activity
+St. Lawrence Market,Toronto,43.6269,-79.4638,07:00:00,19:00:00,02:41:51,activity
+Hockey Hall of Fame,Toronto,43.6239,-79.4931,08:00:00,23:00:00,03:55:41,activity
+Art Gallery of Ontario,Toronto,43.6912,-79.4689,09:00:00,19:00:00,02:15:44,activity
+Distillery Historic District,Toronto,43.6235,-79.4865,10:00:00,20:00:00,05:54:15,activity
+Toronto Zoo,Toronto,43.6358,-79.4986,10:00:00,19:00:00,02:51:42,activity
+Royal Alexandra Theatre,Toronto,43.6248,-79.476,09:00:00,20:00:00,01:51:15,activity
+Tornto Islands Ferries,Toronto,43.6428,-79.3997,07:00:00,22:00:00,05:42:14,activity
+Harbourfront Centre,Toronto,43.5999,-79.43248,08:00:00,23:00:00,03:43:12,activity
+Royal Conservatory of Music,Toronto,43.617,-79.4096,09:00:00,21:00:00,02:51:31,activity
+Ontario Science Centre,Toronto,43.612,-79.4317,06:00:00,22:00:00,04:13:42,activity
+Spadina Museum,Toronto,43.6832,-79.4019,08:00:00,20:00:00,03:25:24,activity
+Spadina Museum,Toronto,43.6832,-79.4019,08:00:00,20:00:00,03:25:24,activity
+Fox Theatre,Toronto,43.6139,-79.4792,08:00:00,01:00:00,02:34:12,entertainment
+Carlton Cinemas,Toronto,43.6294,-79.4192,09:00:00,02:00:00,03:31:24,entertainment
+Cineplex VIP Don Mills,Toronto,43.6248,-79.4128,07:00:00,23:00:00,03:51:12,entertainment
+Bloor Cinema,Toronto,43.6429,-79.4108,09:00:00,02:00:00,03:51:53,entertainment
+The Revue Cinema,Toronto,43.6992,-79.4964,10:00:00,01:00:00,03:12:35,entertainment
+Cineplex Odeon Varsity and VIP,Toronto,43.6917,-79.4812,06:00:00,03:00:00,03:41:53,entertainment
+Imagine Cinema Market Square,Toronto,43.6522,-79.4333,07:00:00,22:00:00,02:42:21,entertainment
+SilverCity Yorkdale Cinemas,Toronto,43.6492,-79.493,09:00:00,20:00:00,03:54:53,entertainment
+The Royal Cinema,Toronto,43.6019,-79.4927,08:00:00,22:00:00,04:52:12,entertainment
+Cineplex Odeon Morningside,Toronto,43.6208,-79.4391,07:00:00,21:00:00,03:25:43,entertainment
+Kingsway Movie Theatre,Toronto,43.6823,-79.4105,09:00:00,23:00:00,02:36:11,entertainment
+Matcha Cafe,Boston,42.37493,-72.058,08:00:00,14:00:00,00:30:00,food
+Tatte,Boston,42.75934,-72.27384,08:00:00,17:00:00,01:00:00,food
+Sunrise Cafe,Boston,42.2711,-72.0028,08:00:00,20:00:00,01:30:00,food
+Late Night Tavern,Boston,42.388,-72.28304,18:00:00,02:00:00,02:00:00,food
+Korean Kitchen,Boston,42.123,-72.999,12:00:00,22:00:00,03:00:00,food
+Snack Shack,Boston,42.33,-72.111,08:00:00,14:00:00,00:30:00,food
+Oak Roasters,Boston,42.99384,-72.0038,06:00:00,18:00:00,01:00:00,food
+Nightlife,Boston,42.3823,-72.0019,14:00:00,23:00:00,04:00:00,food
+TacoMex,Boston,42.1222,-72.00122,10:00:00,22:00:00,02:00:00,food
+Tasty Burger,Boston,42.73322,-72.021,12:00:00,23:00:00,00:45:00,food
+Starbucks,Boston,42.1999,-72.4493,06:00:00,22:00:00,00:30:00,food
+Cava,Boston,42.10383,-72.3933,11:00:00,22:00:00,01:00:00,food
+JP licks,Boston,42.5855,-72.3333,14:00:00,23:00:00,00:30:00,food
+Boston Common,Boston,42.444,-72.002,08:00:00,18:00:00,02:00:00,park
+Spreckles Lake,Boston,42.0392,-72.864,06:00:00,12:00:00,01:00:00,park
+Alta Plaza Park,Boston,42.55,-72.203,06:00:00,20:00:00,01:00:00,park
+Waterfront,Boston,42.3329,-72.0032,00:00:00,23:00:00,02:00:00,park
+Dolores Park,Boston,42.0029,-72.0345,12:00:00,18:00:00,00:45:00,park
+King Park,Boston,42.0322,-72.192,08:00:00,22:00:00,01:00:00,park
+Hydro Pool,Boston,42.049,-72.4902,10:00:00,14:00:00,00:30:00,park
+Hynes Center,Boston,42.3022,-72.4594,08:00:00,18:00:00,03:00:00,park
+Dudley Fountain,Boston,42.3902,-72.563,14:00:00,20:00:00,00:10:00,park
+Ruggles,Boston,42.309,-72.4733,06:00:00,22:00:00,00:30:00,park
+Fenway,Boston,42.293,-72.0283,04:00:00,22:00:00,01:30:00,park
+Harbor Reservation,Boston,42.3922,-72.304,08:00:00,17:00:00,01:00:00,park
+Boston Skydiving,Boston,42.283,-72.392,12:00:00,18:00:00,04:00:00,activity
+MFA Museum,Boston,42.593,-72.239,10:00:00,22:00:00,03:00:00,activity
+Red Sox Game,Boston,42.355,-72.205,16:00:00,23:00:00,06:00:00,activity
+Museum of Science,Boston,42.028,-72.30234,12:00:00,14:00:00,01:00:00,activity
+Faneul Hall,Boston,42.82,-72.30293,11:00:00,22:00:00,01:30:00,activity
+Charles Esplanade,Boston,42.38329,-72.20392,00:00:00,23:59:59,02:30:00,activity
+Aquarium,Boston,42.34922,-72.00292,10:00:00,16:00:00,01:30:00,activity
+ICA Museum,Boston,42.30238,-72.291,08:00:00,16:00:00,00:30:00,activity
+Beacon Hill,Boston,42.23094,-72.84283,10:00:00,22:00:00,02:00:00,activity
+Freedom Trail,Boston,42.4992,-72.09202,00:00:00,22:00:00,05:00:00,activity
+Prudential Center,Boston,42.02002,-72.34003,10:00:00,20:00:00,01:30:00,activity
+Trinity Church,Boston,42.00269,-72.12345,06:00:00,18:00:00,00:15:00,activity
+City Hall,Boston,42.0029,-72.378,12:00:00,22:00:00,00:30:00,activity
+TD Garden,Boston,42.0033,-72.02903,12:00:00,23:00:00,04:00:00,entertainment
+House of Blues,Boston,42.30293,-72.894,14:00:00,23:00:00,02:00:00,entertainment
+Rocky Venue,Boston,42.94837,-72.29003,11:00:00,23:00:00,02:30:00,entertainment
+AMC Theatre,Boston,42.20309,-72.4633,10:00:00,23:00:00,02:30:00,entertainment
+Square Cinema,Boston,42.30484,-72.10293,12:00:00,23:59:59,03:00:00,entertainment
+Regal Fenway,Boston,42.30492,-72.47792,11:00:00,18:00:00,01:00:00,entertainment
+Fenway Stadium,Boston,42.392002,-72.23058,10:00:00,23:00:00,02:00:00,entertainment
+Top Concerts,Boston,42.31111,-72.02211,18:00:00,23:00:00,01:00:00,entertainment
+Hello Theatres,Boston,42.20383,-72.20482,12:00:00,22:00:00,04:00:00,entertainment
+New Girl Venue,Boston,42.4888,-72.02223,18:00:00,20:00:00,00:30:00,entertainment
+Red Blue Hall,Boston,42.7333,-72.2993,12:00:00,23:00:00,03:00:00,entertainment
+MIT Atrium,Boston,42.20843,-72.20394,14:00:00,22:00:00,02:00:00,entertainment

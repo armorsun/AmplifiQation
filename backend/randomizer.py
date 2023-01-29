@@ -7,7 +7,6 @@ from qiskit.quantum_info import SparsePauliOp
 from qiskit_ibm_runtime import Estimator, QiskitRuntimeService, Session
 from qiskit import IBMQ
 
-
 class RNG:
     """
     Random Number Generator either by simulating or running on an actual QC.
