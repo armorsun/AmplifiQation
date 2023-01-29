@@ -35,7 +35,7 @@ By running the Durr and Hoyer algorithm [1] on precomputed Hamiltonian cycles, `
 
 [1] C. Dürr and P. Høyer, “A Quantum Algorithm for Finding the Minimum,” 1996. https://arxiv.org/abs/quant-ph/9607014.
 
-# pyROUTE 
+# Future Work
 
 While ```pyROUTE``` serves as a value proof-of-concept, the AmplifiQation has yet to:
 
