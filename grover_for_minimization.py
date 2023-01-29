@@ -68,38 +68,28 @@ def minimization_oracle(circuit: QuantumCircuit, data_register_q: QuantumRegiste
     #  ancillary wires that is < x, then there must be at least one element in arr that is less than x.
     for i in range(1, x):
 
-        sign_flip_circuit = QuantumCircuit(ancillary_register_q, data_register_q)
+        data_register_q_for_flip = QuantumRegister(number_of_data_qubits_required, 'data_q')
+        ancillary_register_q_for_flip = QuantumRegister(number_ancillary_qubits_required, 'ancillary_q')
+
+        sign_flip_circuit = QuantumCircuit(ancillary_register_q_for_flip, data_register_q_for_flip)
 
         binary_list = to_list(n=i, n_wires=number_ancillary_qubits_required)
-        print(binary_list)
 
-        # qml.FlipSign(i, wires=ancillary_register)
-        # # To improve sucess, we replace the phase inversion by a phase rotation through phi.
-
-        # # Implement flip_sign in pauli primatives
-        # arr_bin = to_list(n=i, n_wires=len(ancillary_register))  # Turn i into a state.
+        sign_flip_circuit.initialize(i, qubits=ancillary_register_q_for_flip)
 
         if binary_list[-1] == 0:
-            sign_flip_circuit.x(ancillary_register_q[-1])
+            sign_flip_circuit.x(ancillary_register_q_for_flip[-1])
 
-        sign_flip_circuit.h(ancillary_register_q[-1])
+        sign_flip_circuit.h(ancillary_register_q_for_flip[-1])
 
-        # Draw the circuit
-        sign_flip_circuit.draw(output='mpl')
-        plt.show()
-
-        sign_flip_circuit.mcx(control_qubits=binary_list[:-1], target_qubit=ancillary_register_q[-1])
-        sign_flip_circuit.h(ancillary_register_q[-1])
-
-        #
-        # for n in range(number_ancillary_qubits_required):
-        #     sign_flip_circuit.crz(arr[j] * pi / (2 ** j), n_ancillary_qubits + j, n)
-        #
-        # qml.ctrl(qml.PauliZ, control=ancillary_register[:-1], control_values=arr_bin[:-1])(
-        #              wires=ancillary_register[-1])
+        sign_flip_circuit.mcx(control_qubits=ancillary_register_q_for_flip[:-1],
+                              target_qubit=ancillary_register_q_for_flip[-1])
+        sign_flip_circuit.h(ancillary_register_q_for_flip[-1])
 
         if binary_list[-1] == 0:
-            sign_flip_circuit.x(ancillary_register_q[-1])
+            sign_flip_circuit.x(ancillary_register_q_for_flip[-1])
+
+        circuit = circuit.compose(sign_flip_circuit)
 
     circuit = circuit.compose(oracle_circuit_for_cleanup)  # Cleanup.
     return circuit
@@ -195,12 +185,12 @@ def minimization_circuit(arr: List[int], x: int) -> QuantumCircuit:
     j = 1
     for _ in range(j):
         # Step 2: Use the oracle to mark solution states.
+        # Step 3: Apply the Grover operator to amplify the probability of getting the correct solution.
         oracle = minimization_oracle(circuit=circuit, data_register_q=data_register_q,
                                      ancillary_register_q=ancillary_register_q, arr=arr, x=x)
 
         grover_op = GroverOperator(oracle=oracle, insert_barriers=True)
 
-        # Step 3: Apply the Grover operator to amplify the probability of getting the correct solution.
         circuit.GroverOperator(wires=data_register)
 
     circuit.measure(data_register_q, data_register_c)
