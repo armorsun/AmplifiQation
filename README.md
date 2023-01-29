@@ -35,6 +35,25 @@ By running the Durr and Hoyer algorithm [1] on precomputed Hamiltonian cycles, `
 
 [1] C. Dürr and P. Høyer, “A Quantum Algorithm for Finding the Minimum,” 1996. https://arxiv.org/abs/quant-ph/9607014.
 
+# Getting Started
+
+## Pre-requisite
+* Install [Docker](https://docs.docker.com/get-docker/) and [Docker-compose](https://docs.docker.com/compose/install/)
+
+## Launch
+
+```
+docker-compose build
+docker-compose up -d
+```
+
+# Example Usage
+
+```
+curl http://localhost/random
+curl http://localhost/PyROUTE
+```
+
 # Future Work
 
 While ```pyROUTE``` serves as a value proof-of-concept, the AmplifiQation has yet to:
