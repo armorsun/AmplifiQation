@@ -12,8 +12,9 @@ from grover_for_minimization import grover_for_minimization
 def grover_enhanced_minimization(arr: list[int], _lower_bound: int = 0, _upper_bound: int = None,
                                  verbose: bool = False) -> int:
     """
-    Use the Durr & Hoyer Quantum algorithm for minimzation to find the minimum value in arr.
-    This algorithm is basically just binary search ontop of Grover's search.
+    Use the Durr & Hoyer Quantum algorithm for minimization to find the minimum
+    value in arr.
+    This algorithm is basically just binary search on-top of Grover's search.
     Query complexity:
         Let m = initial_upper_bound - initial_lower_bound = arr[0] - 0
         Let n = len(arr)
@@ -51,14 +52,16 @@ def grover_enhanced_minimization(arr: list[int], _lower_bound: int = 0, _upper_b
             # There is at least one element smaller than middle, lower our upper bound.
             if verbose:
                 print("Smaller element found, lowering our upper bound...")
-            return grover_enhanced_minimization(arr, _lower_bound=_lower_bound, _upper_bound=middle - 1,
+            return grover_enhanced_minimization(arr, _lower_bound=_lower_bound,
+                                                _upper_bound=middle - 1,
                                                 verbose=verbose)
 
         else:
             # There are no elements smaller than middle, raise the lower bound.
             if verbose:
                 print("No smaller element found, raising our lower bound...")
-            return grover_enhanced_minimization(arr, _lower_bound=middle + 1, _upper_bound=_upper_bound,
+            return grover_enhanced_minimization(arr, _lower_bound=middle + 1,
+                                                _upper_bound=_upper_bound,
                                                 verbose=verbose)
 
     else:
@@ -68,10 +71,10 @@ def grover_enhanced_minimization(arr: list[int], _lower_bound: int = 0, _upper_b
 
 def grover_for_minimization_classical(arr: list[int], x: int) -> bool:
     """
-    This is a classical function that performs the same function as grover_for_minimization(). That is, check if arr
-     contains an element < x.
-    This is just used for testing to make sure the classical grover_enhanced_minimization() overhead is working as
-     expected.
+    This is a classical function that performs the same function as
+    grover_for_minimization(). That is, check if arr contains an element < x.
+    This is just used for testing to make sure the classical
+    grover_enhanced_minimization() overhead is working as expected.
     :return: bool:
         True: We found an element in arr < x.
         False: otherwise.

@@ -14,28 +14,33 @@ from sklearn.neighbors import DistanceMetric
 
 from backend.hamiltonian_cycles import hamiltonian_cycle
 from randomizer import RNG
+from Typing import Dict
+
+IBM_QUANTUM_TOKEN = '9e7bde2b4061405bfd573264c0b7782d144c344aaa91cd8632cd492dff71254520bdd5c5f5a1726e35d66f5e4cdc8d411698fc0424e3253436eabf817671f72d'
 
 
 class DataManager:
     """
     Generates a dict of costs
-    events: A pandas DataFrame
+    events: Pandas.DataFrame
+        A pandas df of events
     """
-    # df:
-    # rng: RNG
+    df: DataFrame
+    rng: RNG
 
-    def __init__(self, in_file):
+    def __init__(self, filepath: str):
         """
-        # TODO:
-        :param in_file:
+        Initialization of DataManager Class
+        :param in_file: str
+            string of file path
         """
         # TODO: Interface with Google maps
-        self.df = pandas.read_csv(in_file)
+        self.df = pandas.read_csv(filepath)
 
     def _generate_data(self):
         """
-        # TODO:
-        :return:
+        # Prepares data in a pandas DataFrame needed for other classes
+        :return: None
         """
         print(self.df)
         df = self.df[['name', 'latitude', 'longitude']].copy()
@@ -43,21 +48,25 @@ class DataManager:
 
     def _convert_to_rad(self):
         """
-        TODO:
-        :return:
+        Converts long and lat coordinates to radians and adds an index column
+        :return: None
         """
         self.df_new[['lat_radians', 'long_radians']] = (
                     np.radians(self.df_new.loc[:, ['latitude', 'longitude']]))
         self.df_new['index_col'] = self.df_new.index
 
-    # @ct.electron
+    @ct.electron
     def _get_random_events(self, num_event: int):
         """
-        # TODO:
-        :param num_event:
-        :return:
+        Uses the Quantum RNG to generate a list of numbers which determine
+        the events to pick up to <num_events>
+        :param num_event: int
+            number of events to generate
+        :return: Pandas.DataFrame:
+            Data frame of desired events
+
         """
-        # token = os.environ["IBM_QUANTUM_TOKEN"]
+        token = os.environ[IBM_QUANTUM_TOKEN]
         backend = 2
         self.rng = RNG(backend, token)
         binary_len = len(format(num_event, 'b'))
@@ -73,12 +82,15 @@ class DataManager:
 
         return temp_df
 
-    # @ct.electron
-    def build_cost_matrix(self, num_event: int):
+    @ct.electron
+    def build_cost_matrix(self, num_event: int) -> List[List]:
         """
-        # TODO:
+        Builds a matrix of all distances between any two events of size
+        <num_events>
         :param num_event:
+            Size of matrix to generate
         :return:
+            Cost Matrix of desired size
         """
         self._generate_data()
         self._convert_to_rad()

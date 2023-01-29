@@ -7,7 +7,8 @@ https://www.geeksforgeeks.org/print-all-hamiltonian-cycles-in-an-undirected-grap
 
 def is_safe(v, graph, path, pos):
     """
-    Function to check if a vertex v can be added at index pos in the Hamiltonian Cycle
+    Function to check if a vertex v can be added at index pos in the
+    Hamiltonian Cycle
     """
     # If the vertex is adjacent to the vertex of the previously added vertex
     if graph[path[pos - 1]][v] == 0:
