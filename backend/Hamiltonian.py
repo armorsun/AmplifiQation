@@ -1,10 +1,10 @@
-import pandas as pd
 import scipy as sp
+import covalent as ct
 import numpy as np
 import sklearn
+import os
 from sklearn.neighbors import DistanceMetric
 from randomizer import RNG
-
 
 class Hamiltonian:
     """
@@ -14,8 +14,8 @@ class Hamiltonian:
     # df:
     # rng: RNG
 
-    def __init__(self, file_path: str):
-        self.df = pd.read_csv(file_path)
+    def __init__(self, df):
+        self.df = df;
 
     def _generate_data(self):
         df = self.df[['name', 'latitude', 'longitude']].copy()
@@ -26,8 +26,9 @@ class Hamiltonian:
                     np.radians(self.df_new.loc[:, ['latitude', 'longitude']]))
         self.df_new['index_col'] = self.df_new.index
 
+    @ct.electron
     def _get_random_events(self, num_event: int):
-        token = open('IBMtoken.txt', 'r').read()
+        token = os.environ["IBM_QUANTUM_TOKEN"]
         backend = 2
         self.rng = RNG(backend, token)
         binary_len = len(format(num_event, 'b'))
@@ -43,6 +44,7 @@ class Hamiltonian:
 
         return temp_df
 
+    @ct.electron
     def get_distance_matrix(self, num_event: int):
         self._generate_data()
         self._convert_to_rad()
