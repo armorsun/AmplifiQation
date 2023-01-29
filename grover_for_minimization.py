@@ -11,7 +11,7 @@ L. Grover, “A fast quantum mechanical algorithm for database search,” in Pro
 import math
 
 import qiskit
-from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
+from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, transpile
 from qiskit.circuit.library import GroverOperator
 from qiskit import Aer
 from qiskit.visualization import plot_histogram
@@ -20,6 +20,8 @@ import matplotlib.pyplot as plt
 
 from numpy import pi as pi
 from typing import List
+
+from qiskit_aer import AerSimulator
 
 from qft import qft
 
@@ -196,7 +198,7 @@ def minimization_circuit(arr: List[int], x: int) -> QuantumCircuit:
 
     circuit.barrier(quantum_data_register)  # Just to ease of visulation.
 
-    # circuit.measure(quantum_data_register, classical_data_register)
+    circuit.measure(quantum_data_register, classical_data_register)
 
     return circuit
 
@@ -214,26 +216,21 @@ def grover_for_minimization(arr: List[int], x: int) -> bool:
     """
     circuit = minimization_circuit(arr=arr, x=x)
 
-    backend = Aer.get_backend("qasm_simulator")
-    job = qiskit.execute(experiments=circuit, backend=backend, shots=1)
-    counts = job.result().get_counts()
+    # Execute the circuit on the qasm simulator.
+    backend = AerSimulator()
+    qc_compiled = transpile(circuit, backend)
 
+    job_sim = backend.run(qc_compiled, shots=1024)
+
+    # Grab the results from the job.
+    result_sim = job_sim.result()
+
+    counts = result_sim.get_counts(qc_compiled)
     print(counts)
 
-    # Draw the circuit
-    circuit.draw(output='mpl')
-    plt.show()
-
-    # # Execute the circuit on Aer's qasm_simulator
-    # simulator = QasmSimulator()
-    # job = simulator.run(compiled_circuit, shots=1000)
-    #
-    # # Grab results from the job
-    # result = job.result()
-    #
-    # # Returns counts
-    # counts = result.get_counts(compiled_circuit)
-    #
+    # # Draw the circuit
+    # circuit.draw(output='mpl')
+    # plt.show()
 
     # print("\nlen(values):")  # Four bits can encode 16 distinct characters
     # print(len(values))
@@ -261,12 +258,12 @@ def grover_for_minimization(arr: List[int], x: int) -> bool:
     # found_elements = [i for indx, i in enumerate(arr) if sample[indx] == 1]
     # print("Found elements: " + str(found_elements))
     #
-    # if len(found_elements) > 0:
-    #     if found_elements[0] < x:
-    #         # If the found value is actually less than result, great!
-    #         return True
-    #
-    # # No such element exists.
+    if len(found_elements) > 0:
+        if found_elements[0] < x:
+            # If the found value is actually less than result, great!
+            return True
+
+    # No such element exists.
     return False
 
 
